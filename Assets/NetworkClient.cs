@@ -115,6 +115,11 @@ public class NetworkClient : MonoBehaviour
     private void ProcessReceivedMsg(string msg)
     {
         Debug.Log("Msg received = " + msg);
+
+        if (msg.StartsWith("2"))
+        {
+            StateManager.Instance.state = StateManager.GameState.LOBBY;
+        }
     }
 
     public void SendMessageToServer(string msg)
