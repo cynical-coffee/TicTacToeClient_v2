@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AccountManager : MonoBehaviour
 {
-    [SerializeField] private GameObject LoginPageUI;
-    [SerializeField] private GameObject LobbyUI;
+    [SerializeField] private GameObject loginPagePrefab;
+
+    private GameObject loginPageUI;
 
     private TMP_InputField[] inputFields;
     private TMP_InputField userNameField;
@@ -28,6 +26,8 @@ public class AccountManager : MonoBehaviour
 
     private void Start()
     {
+        loginPageUI = Instantiate(loginPagePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+
         inputFields = FindObjectsOfType<TMP_InputField>(true);
         buttons = FindObjectsOfType<Button>(true);
         titleText = FindObjectsOfType<TMP_Text>(true);
@@ -103,28 +103,17 @@ public class AccountManager : MonoBehaviour
 
     private void RegisterAccountInformation()
     {
-        NetworkClient.Instance.SendMessageToServer(newAccountSignifier + "," + userNameField.text + "," + passwordNameField.text);
+        NetworkClientProcessing.Instance.SendMessageToServer(newAccountSignifier + "," + userNameField.text + "," + passwordNameField.text);
     }
 
     private void SignInWithAccountInformation()
     {
-        NetworkClient.Instance.SendMessageToServer(returningAccountSignifier + "," + userNameField.text + "," + passwordNameField.text);
+        NetworkClientProcessing.Instance.SendMessageToServer(returningAccountSignifier + "," + userNameField.text + "," + passwordNameField.text);
+        StateManager.Instance.userName = userNameField.text;
     }
 
-    private void Update()
+    private void OnDestroy()
     {
-        switch (StateManager.Instance.state)
-        { 
-            case StateManager.GameState.LOGINPAGE:
-                if (!LoginPageUI.activeSelf)
-                {
-                    LoginPageUI.SetActive(true);
-                }
-                break;
-            case StateManager.GameState.LOBBY:
-                LoginPageUI.SetActive(false);
-                LobbyUI.SetActive(true);
-                break;
-        }
+        Destroy(loginPageUI);
     }
 }

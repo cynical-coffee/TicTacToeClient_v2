@@ -1,32 +1,16 @@
-using System;
 using UnityEngine;
-using UnityEngine.Assertions;
 using Unity.Collections;
 using Unity.Networking.Transport;
 using System.Text;
 
 public class NetworkClient : MonoBehaviour
 {
-    public static NetworkClient Instance { get; private set; }
-
     NetworkDriver networkDriver;
     NetworkConnection networkConnection;
     NetworkPipeline reliableAndInOrderPipeline;
     NetworkPipeline nonReliableNotInOrderedPipeline;
     const ushort NetworkPort = 9001;
     const string IPAddress = "192.168.2.188";
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
 
     void Start()
     {
@@ -90,7 +74,7 @@ public class NetworkClient : MonoBehaviour
                     streamReader.ReadBytes(buffer);
                     byte[] byteBuffer = buffer.ToArray();
                     string msg = Encoding.Unicode.GetString(byteBuffer);
-                    ProcessReceivedMsg(msg);
+                    NetworkClientProcessing.Instance.ProcessMessageFromServer(msg);
                     buffer.Dispose();
                     break;
                 case NetworkEvent.Type.Disconnect:
@@ -112,16 +96,6 @@ public class NetworkClient : MonoBehaviour
         return true;
     }
 
-    private void ProcessReceivedMsg(string msg)
-    {
-        Debug.Log("Msg received = " + msg);
-
-        if (msg.StartsWith("2"))
-        {
-            StateManager.Instance.state = StateManager.GameState.LOBBY;
-        }
-    }
-
     public void SendMessageToServer(string msg)
     {
         byte[] msgAsByteArray = Encoding.Unicode.GetBytes(msg);
@@ -135,6 +109,5 @@ public class NetworkClient : MonoBehaviour
 
         buffer.Dispose();
     }
-
 }
 
