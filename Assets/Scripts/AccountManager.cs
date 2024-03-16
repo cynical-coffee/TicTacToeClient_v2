@@ -21,16 +21,13 @@ public class AccountManager : MonoBehaviour
     private TMP_Text createAccountText;
     private TMP_Text signInText;
 
-    private const string newAccountSignifier = "0";
-    private const string returningAccountSignifier = "1";
-
     private void Start()
     {
         loginPageUI = Instantiate(loginPagePrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
-        inputFields = FindObjectsOfType<TMP_InputField>(true);
-        buttons = FindObjectsOfType<Button>(true);
-        titleText = FindObjectsOfType<TMP_Text>(true);
+        inputFields = FindObjectsByType<TMP_InputField>(findObjectsInactive: FindObjectsInactive.Include,sortMode: FindObjectsSortMode.None);
+        buttons = FindObjectsByType<Button>(findObjectsInactive: FindObjectsInactive.Include, sortMode: FindObjectsSortMode.None);
+        titleText = FindObjectsByType<TMP_Text>(findObjectsInactive: FindObjectsInactive.Include, sortMode: FindObjectsSortMode.None);
 
         foreach (TMP_InputField field in inputFields)
         {
@@ -103,12 +100,12 @@ public class AccountManager : MonoBehaviour
 
     private void RegisterAccountInformation()
     {
-        NetworkClientProcessing.Instance.SendMessageToServer(newAccountSignifier + "," + userNameField.text + "," + passwordNameField.text);
+        NetworkClientProcessing.SendMessageToServer(ClientToServerSignifiers.newAccount + "," + userNameField.text + "," + passwordNameField.text, TransportPipeline.ReliableAndInOrder);
     }
 
     private void SignInWithAccountInformation()
     {
-        NetworkClientProcessing.Instance.SendMessageToServer(returningAccountSignifier + "," + userNameField.text + "," + passwordNameField.text);
+        NetworkClientProcessing.SendMessageToServer(ClientToServerSignifiers.returningAccount + "," + userNameField.text + "," + passwordNameField.text, TransportPipeline.ReliableAndInOrder);
         StateManager.Instance.userName = userNameField.text;
     }
 

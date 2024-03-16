@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,44 +5,31 @@ using UnityEngine.UI;
 public class GameRoomManager : MonoBehaviour
 {
     [SerializeField] private GameObject gameRoomPrefab;
-
     private GameObject gameRoomUI;
-    private GameObject gameGrid;
 
-    private int[] gameBoard;
-
-    private Button[] gameGridButtons;
-
-    private string playerLetter = "";
-
+    private Button[] gameRoomButtons;
+    private Button leaveRoomButton;
 
     private void Start()
     {
-        gameGrid = Instantiate(gameRoomPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        gameGrid = GameObject.Find("GameGrid");
-        gameGridButtons = gameGrid.GetComponentsInChildren<Button>();
+        gameRoomUI = Instantiate(gameRoomPrefab, new Vector3(0, 0, 0), Quaternion.identity);
 
-        gameBoard = new[] { 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        gameRoomButtons = FindObjectsByType<Button>(findObjectsInactive: FindObjectsInactive.Include,
+            sortMode: FindObjectsSortMode.None);
 
-        //for (int i = 0; i < gameGridButtons.Length; i++)
-        //{
-        //    int k = i;
-        //    gameGridButtons[i].onClick.AddListener(delegate { OnSquareClick(k); });
-        //}
-
-        foreach (Button button in gameGridButtons)
+        foreach (Button button in gameRoomButtons)
         {
-              //button.onClick.AddListener(OnSquareClick());
+            if (button.name == "Button_LeaveRoom")
+            {
+                leaveRoomButton = button;
+            }
         }
 
+        leaveRoomButton.onClick.AddListener(LeaveGameRoom);
     }
 
-    private void OnSquareClick(Button button)   
+    private void LeaveGameRoom()
     {
-        //gameGridButtons[squareNum].GetComponentInChildren<TMP_Text>().text = playerLetter;
+        
     }
-
-    
-
-     
 }

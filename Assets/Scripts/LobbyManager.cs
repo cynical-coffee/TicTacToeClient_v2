@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,17 +15,15 @@ public class LobbyManager : MonoBehaviour
 
     private Button[] buttons;
     private Button createGameRoomButton;
+    private Button joinGameRoomButton;
     private Button logOutButton;
-
-    private const string createGameRoomSignifier = "3";
-    private const string logoutSignifier = "4";
 
     private void Start()
     {
         lobbyUI = Instantiate(LobbyPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        informationalText = FindObjectsOfType<TMP_Text>();
-        gameRoomInputField = FindObjectOfType<TMP_InputField>();
-        buttons = FindObjectsOfType<Button>();
+        informationalText = FindObjectsByType<TMP_Text>(sortMode: FindObjectsSortMode.None);
+        gameRoomInputField = FindAnyObjectByType<TMP_InputField>();
+        buttons = FindObjectsByType<Button>(sortMode: FindObjectsSortMode.None);
 
         foreach (TMP_Text text in informationalText)
         {
@@ -42,6 +39,10 @@ public class LobbyManager : MonoBehaviour
             {
                 createGameRoomButton = button;
             }
+            else if (button.name == "Button_JoinRoom")
+            {
+                joinGameRoomButton = button;
+            }
             else if (button.name == "Button_LogOut")
             {
                 logOutButton = button;
@@ -50,17 +51,23 @@ public class LobbyManager : MonoBehaviour
 
         username.text = $"Welcome Back, {StateManager.Instance.userName}!";
         createGameRoomButton.onClick.AddListener(CreateNewGameRoom);
+        joinGameRoomButton.onClick.AddListener(JoinGameRoom);
         logOutButton.onClick.AddListener(LogOut);
     }
 
     private void CreateNewGameRoom()
     {
-        NetworkClientProcessing.Instance.SendMessageToServer(createGameRoomSignifier + "," + gameRoomInputField.text);
+        NetworkClientProcessing.SendMessageToServer(ClientToServerSignifiers.createGameRoom + "," + gameRoomInputField.text, TransportPipeline.ReliableAndInOrder);
+    }
+
+    private void JoinGameRoom()
+    {
+        NetworkClientProcessing.SendMessageToServer(ClientToServerSignifiers.joinExistingRoom + "," + gameRoomInputField.text, TransportPipeline.ReliableAndInOrder);
     }
 
     private void LogOut()
     {
-        NetworkClientProcessing.Instance.SendMessageToServer(logoutSignifier);
+        NetworkClientProcessing.SendMessageToServer(ClientToServerSignifiers.logout.ToString(), TransportPipeline.ReliableAndInOrder);
     }
 
     private void OnDestroy()
