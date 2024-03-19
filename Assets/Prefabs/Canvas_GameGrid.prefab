@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 3524864606971766769}
   - component: {fileID: 3524864606971766768}
   m_Layer: 5
-  m_Name: GameGrid
+  m_Name: Canvas_GameGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

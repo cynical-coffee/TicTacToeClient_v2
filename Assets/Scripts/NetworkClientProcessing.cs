@@ -35,8 +35,26 @@ public static class NetworkClientProcessing
         {
             Debug.Log(SystemMessages.createUsernameFailed);
         }
-
-        //gameLogic.DoSomething();
+        else if (signifier == ServerToClientSignifiers.leaveGameRoom)
+        {
+            StateManager.Instance.UpdateGameState(StateManager.GameState.LOBBY);
+        }
+        else if (signifier == ServerToClientSignifiers.joinGameRoomFailed)
+        {
+            Debug.Log(SystemMessages.joinExistingRoomFailed);
+        }
+        else if (signifier == ServerToClientSignifiers.gameRoomFull)
+        {
+            Debug.Log(SystemMessages.gameRoomFull);
+        }
+        else if (signifier == ServerToClientSignifiers.startNewGame)
+        {
+            StateManager.Instance.UpdateGameState(StateManager.GameState.GAMESTART);
+        }
+        else if (signifier == ServerToClientSignifiers.opponentUsername)
+        {
+            StateManager.Instance.opponentUsername = csv[1];
+        }
     }
 
     public static void SendMessageToServer(string msg, TransportPipeline pipeline)
@@ -72,7 +90,6 @@ public static class NetworkClientProcessing
 
     #region Setup
     static NetworkClient networkClient;
-    //static GameLogic gameLogic;
 
     public static void SetNetworkedClient(NetworkClient NetworkClient)
     {
@@ -82,13 +99,8 @@ public static class NetworkClientProcessing
     {
         return networkClient;
     }
-    //static public void SetGameLogic(GameLogic GameLogic)
-    //{
-    //    gameLogic = GameLogic;
-    //}
 
     #endregion
-
 }
 
 #region Protocol Signifiers
@@ -99,7 +111,7 @@ public static class ClientToServerSignifiers
     public const int createGameRoom= 3;
     public const int logout = 4;
     public const int joinExistingRoom = 5;
-    public const int leaveGameRoom = 6;
+    public const int leaveGameRoom = 9;
 }
 
 public static class ServerToClientSignifiers
@@ -110,16 +122,22 @@ public static class ServerToClientSignifiers
     public const int failedLogin = 5;
     public const int failedToCreateRoom = 6;
     public const int usernameTaken = 7;
+    public const int gameRoomFull = 8;
+    public const int leaveGameRoom = 9;
+    public const int joinGameRoomFailed = 10;
+    public const int startNewGame = 11;
+    public const int opponentUsername = 12;
 }
 #endregion
-
 
 #region System Messages
 public static class SystemMessages
 {
-    public const string loginFailed = "Username/Password is incorrect or does not exist";
-    public const string createRoomFailed = "Room Already Exists";
+    public const string loginFailed = "Username/Password is incorrect or does not exist.";
+    public const string createRoomFailed = "Room already exists.";
     public const string createUsernameFailed = "Username is taken.";
+    public const string joinExistingRoomFailed = "Room was not found or does not exist.";
+    public const string gameRoomFull = "Game room is full.";
 
     public static void LoginSuccessful(string username)
     {

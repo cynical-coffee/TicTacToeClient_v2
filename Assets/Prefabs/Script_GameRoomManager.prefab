@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4436391998404505445
+--- !u!1 &8499936035094860135
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7885348095009504382}
-  - component: {fileID: 5847188312630189452}
+  - component: {fileID: 4377073302356081899}
+  - component: {fileID: 1576102089608826762}
   m_Layer: 0
-  m_Name: LobbyManager
+  m_Name: Script_GameRoomManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7885348095009504382
+--- !u!4 &4377073302356081899
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4436391998404505445}
+  m_GameObject: {fileID: 8499936035094860135}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 899.7097, y: 577.1289, z: -0.5570841}
+  m_LocalPosition: {x: 908.63086, y: 432.4554, z: -2.2270806}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5847188312630189452
+--- !u!114 &1576102089608826762
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4436391998404505445}
+  m_GameObject: {fileID: 8499936035094860135}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f20fa77286b8fc24fa372962c5c64b15, type: 3}
+  m_Script: {fileID: 11500000, guid: 76e308b7fb17405439f7921d385fe487, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LobbyPrefab: {fileID: 48189011520902525, guid: c7eb6f74f41290944a9cf91cb5ac482a, type: 3}
+  gameRoomPrefab: {fileID: 560556782921437744, guid: 5edf5e6092d000c4c8e679c1a95501f0, type: 3}
+  gamePlayPrefab: {fileID: 3524864606971766770, guid: 5663e888cd57b7b46a4223a2535f46f7, type: 3}

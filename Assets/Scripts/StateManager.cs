@@ -7,10 +7,12 @@ public class StateManager : MonoBehaviour
     {
         LOGINPAGE = 0,
         LOBBY = 1,
-        GAMEROOM = 2
+        GAMEROOM = 2,
+        GAMESTART = 3
     }
     public GameState state;
     public string userName { get; set; }
+    public string opponentUsername { get; set; }
 
     [SerializeField] private GameObject accountManagerPrefab;
     [SerializeField] private GameObject lobbyManagerPrefab;
@@ -55,6 +57,12 @@ public class StateManager : MonoBehaviour
 
     private void LobbySate()
     {
+        if (gameRoomManagerClone != null)
+        {
+            Destroy(gameRoomManagerClone);
+            gameRoomManagerClone = null;
+        }
+
         if (accountManagerClone != null)
         {
             Destroy(accountManagerClone);
@@ -71,6 +79,12 @@ public class StateManager : MonoBehaviour
             lobbyManagerClone = null;
         }
         gameRoomManagerClone = Instantiate(gameRoomManagerPrefab);
+       // gameRoomManagerClone.GetComponent<GameRoomManager>().GameRoomSetUp();
+    }
+
+    private void GameStartState()
+    {
+        gameRoomManagerClone.GetComponent<GameRoomManager>().StartGame();
     }
 
     public void UpdateGameState(GameState newState)
@@ -87,6 +101,9 @@ public class StateManager : MonoBehaviour
                 break;
             case GameState.GAMEROOM:
                 GameRoomState();
+                break;
+            case GameState.GAMESTART:
+                GameStartState();
                 break;
         }
     }
